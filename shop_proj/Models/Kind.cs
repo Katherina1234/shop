@@ -11,7 +11,8 @@ namespace shop_proj.Models
         public string Colour { get; set; }
         public Tovar Tovar { get; set; }
         public int TovarId { get; set; }
-        public string Size { get; set; }
+        public List<Size> Sizes { get; set; }
         public List<Image> Images { get; set; }
+
     }
 }

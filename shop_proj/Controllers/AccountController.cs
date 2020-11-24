@@ -11,13 +11,14 @@ namespace shop_proj.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> userman;
+        private readonly RoleManager<User> _roleManager;
+        private readonly SignInManager<User> signman;
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            userman = userManager;
+            signman = signInManager;
         }
         [HttpGet]
         public IActionResult Register()
@@ -25,18 +26,21 @@ namespace shop_proj.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register(Register model)
+        public async Task<IActionResult> Register(Register reg)
         {
             if (ModelState.IsValid)
-            {
-                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };
-                // добавляем пользователя
-                var result = await _userManager.CreateAsync(user, model.Password);
+            {          
+               
+                User user = new User { Email = reg.Email, UserName = reg.Email, Year = reg.Year };
+               
+                var result = await userman.CreateAsync(user, reg.Password);
                 if (result.Succeeded)
                 {
-                    // установка куки
-                    await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
+                    List<string> rol1 = new List<string>();
+                    rol1.Add("user");
+                    await signman.SignInAsync(user, false);
+                    await userman.AddToRolesAsync(user, rol1);
+                    return RedirectToAction("Index", "User");
                 }
                 else
                 {
@@ -46,7 +50,7 @@ namespace shop_proj.Controllers
                     }
                 }
             }
-            return View(model);
+            return View(reg);
         }
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
@@ -56,38 +60,36 @@ namespace shop_proj.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(Login model)
+        public async Task<IActionResult> Login(Login obj)
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var result = await signman.PasswordSignInAsync(obj.Email, obj.Password, obj.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    // проверяем, принадлежит ли URL приложению
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    if (!string.IsNullOrEmpty(obj.ReturnUrl) && Url.IsLocalUrl(obj.ReturnUrl))
                     {
-                        return Redirect(model.ReturnUrl);
+                        return Redirect(obj.ReturnUrl);
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "User");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                    ModelState.AddModelError("", "Невірний логін чи пароль");
                 }
             }
-            return View(model);
+            return View(obj);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            // удаляем аутентификационные куки
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            await signman.SignOutAsync();
+            return RedirectToAction("Index", "User");
         }
     }
 

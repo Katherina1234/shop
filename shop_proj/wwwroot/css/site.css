@@ -1,7 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 body {
-    background-color: lavender;
+    background-color:gainsboro;
 }
 
 #cl2 {
@@ -74,4 +74,123 @@ body {
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+.tovar {
+    font-style:italic;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    max-width:220px;
+    width: 220px;
+    -webkit-box-shadow: 3px 3px 6px 4px #888;
+    -moz-box-shadow: 3px 3px 6px 4px #888;
+    box-shadow: 3px 3px 6px 4px #888;
+  
+}
+
+    .tovar img {
+        display: block;
+        width: 100%;
+        transition: width .2s;
+        height: 300px;
+    }
+.holder {
+    position: relative;
+  
+}
+
+.block {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    background: rgba(255,255,255, 0.7);
+    padding: 5px;
+    display: none;
+    align-content: center;
+    text-decoration: none;
+    font-style:unset;
+}
+
+.holder:hover .block {
+    display: block;
+}
+.txt1{
+color:palevioletred;
+
+text-align:center;
+
+}
+
+.main {
+    width: 400px;
+}
+
+.slick-slide {
+    overflow: hidden;
+    height: 310px;
+    position: relative;
+   
+}
+
+    .slick-slide img {
+        transition: width 0.5s;
+        height: auto;
+        width: 100%;
+        object-fit: cover;
+    }
+
+.slick-list img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.slick-dots li {
+    width: 25%;
+    object-fit: cover;
+    display: inline-block;
+    margin: 0;
+    height: auto;
+    padding: 20px 10px;
+}
+
+    .slick-dots li img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 6px;
+        transition: 0.5s;
+        border: 1px solid #fff;
+        padding: 5px;
+        box-shadow: 0.5px 3px 7px rgba(0, 0, 0, 0.18);
+        -moz-box-shadow: 0.5px 3px 7px rgba(0, 0, 0, 0.18);
+        -webkit-box-shadow: 0.5px 3px 7px rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .slick-dots li:hover img {
+        -webkit-box-shadow: 0.9px 4.9px 21px rgba(0, 0, 0, 0.25);
+        box-shadow: 0.9px 4.9px 21px rgba(0, 0, 0, 0.25);
+        -moz-box-shadow: 0.9px 4.9px 21px rgba(0, 0, 0, 0.25);
+        border: 1px solid #e2e2e2;
+    }
+
+.slick-dots {
+    position: relative;
+    text-align: left;
+    bottom: 0;
+}
+.mini_img img {
+    max-width:100px;
+    max-height: 100px;
+}
+.item_korz {
+    width: 100%;
+    height: 100px;
+    -webkit-box-shadow: 3px 3px 6px 4px #888;
+    -moz-box-shadow: 3px 3px 6px 4px #888;
+    box-shadow: 3px 3px 6px 4px #888;
+    margin-bottom:15px;
+    margin-top:5px;
 }

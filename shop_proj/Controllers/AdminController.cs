@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using shop_proj.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -71,30 +72,60 @@ namespace shop_proj.Controllers
         public IActionResult AddKind(int? id)
         {
             ViewBag.Id = id;
+            ViewBag.sizes = new List<String> { "XS", "S", "M", "L", "XL", "XXL", "XXL" };
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Addkind(Kind user, IFormFile uploadedFile)
+        public async Task<IActionResult> Addkind(Kind user, List<IFormFile> uploadedFiles, int xxs, int xs, int s, int m, int l, int xl, int xxl)
         {
             Image img = new Image();
             Tovar tovar = await db.Tovars.FirstOrDefaultAsync(p => p.Id == user.TovarId);
-     
-            Kind kind = new Kind { Colour = user.Colour, Size = user.Size, Tovar = tovar };
+            Size size = new Size();
+
+            Kind kind = new Kind { Colour = user.Colour, Tovar = tovar };
 
             db.Kinds.Add(kind);
-            if (uploadedFile != null)
+            foreach (var uploadedFile in uploadedFiles)
             {
-                img.Name = uploadedFile.FileName;
-                string path = "/Images/" + uploadedFile.FileName;
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                if (uploadedFile != null)
                 {
-                    await uploadedFile.CopyToAsync(fileStream);
+                    img.Name = uploadedFile.FileName;
+                    string path = "/Images/" + uploadedFile.FileName;
+                    using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                    {
+                        await uploadedFile.CopyToAsync(fileStream);
+                    }
+                    Image file = new Image { Name = uploadedFile.FileName, Path = path, Kind = kind };
+                    db.Images.Add(file);
+
                 }
-                 Image file = new Image { Name = uploadedFile.FileName, Path = path, Kind=user};
-                  db.Images.Add(file);
-
             }
+            List<Size> tt = new List<Size> { new Size("xxs", xxs),
+            new Size("xs",xs), new Size ("s",s), new Size("m",m), new Size("l",l), new Size("xl",xl), new Size("xxl",xxl) };
+            Size t1 = new Size();
+          /*  foreach(var item in Sizesdif) {
+                t1.Name = item;
+                t1.Count = 1;
+                foreach (var item1 in Sizesdif)
+                {
+                    if (item1 == t1.Name)
+                    {
+                        Sizesdif.Remove(item1);
+                        t1.Count++;
+                    }
 
+                }
+                t1.Count--;
+                tt.Add(t1);
+                            }*/
+            foreach (var item in tt)
+            {
+                if (item.Count != 0)
+                {
+                    Size file = new Size { Name = item.Name, Count = item.Count, Kind = kind };
+                    db.Sizes.Add(file);
+                }
+            }
             await db.SaveChangesAsync();
             return RedirectToAction("Tovarinf",  new { id=tovar.Id });
         }

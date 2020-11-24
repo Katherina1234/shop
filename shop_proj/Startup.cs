@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace shop_proj
 {
@@ -20,16 +22,16 @@ namespace shop_proj
         {
             services.AddDbContext<AppContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+         
 
 
-
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<AppContext>();
-
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppContext>();
+         //   services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+      //  .AddEntityFrameworkStores<AppContext>();
             services.AddControllersWithViews();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();
 

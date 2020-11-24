@@ -1,0 +1,71 @@
+﻿@model shop_proj.Models.Korzyna
+@{
+    ViewBag.Title = "";
+}
+<form method="post">
+    <div class="container">
+
+
+        @foreach (var item in Model.Items)
+        {
+            <div class="row item_korz ">
+
+                <div class="col col-lg-4 col-md-4">
+                    <input type="checkbox" name="add[]" value="@item.Size.Id">
+                    <h6>@item.Size.Kind.Tovar.Name - @item.Size.Kind.Tovar.Model</h6>
+                    <h6>Ціна @item.Size.Kind.Tovar.Price грн.</h6>
+                </div>
+                <div class="col col-lg-4 col-md-4">
+                    <h6>Розмір @item.Size.Name </h6>
+                </div>
+                <div class="col col-lg-4 col-md-4">
+                    @foreach (var image in item.Size.Kind.Images)
+                    {
+                        <div class="mini_img">
+                            <img src="@image.Path" alt="Sample Image" />
+
+                        </div>
+
+                        break;
+                    }
+                </div>
+            </div>
+
+        }
+
+        <input type="button" id="btn1" value=" Замовити" class="btn" />
+
+    </div>
+
+</form>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+
+
+            $('#btn1').bind('click', function () {
+                var check = [];
+                $("input[type=checkbox]:checked").each(function () {
+                    check.push($(this).attr("value"));
+                });
+
+                var selectedValue = $("option:selected").attr("value");
+
+                alert("CheckBox [0]: " + check[0]);
+                alert("CheckBox [1]: " + check[1]);
+
+               $.ajax({
+                type: 'POST',
+                   url: '@Url.Action("GetImages")/' + id,
+                   data: check,
+                success: function (data) {
+
+                }
+            });
+            });
+
+        })
+
+
+    </script>
+}

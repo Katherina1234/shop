@@ -1,0 +1,126 @@
+﻿@model shop_proj.Models.Tovar
+@{
+    ViewBag.Title = "";
+}
+
+<div class="container">
+    <div class="row">
+
+
+
+
+
+        <div class="col col-lg-6 col-md-6 ">
+            <div class="main" id="images">
+                <div id="carousel" class="slider">
+
+                    @foreach (var kind in Model.Kinds)
+                    {
+                        @foreach (var image in kind.Images)
+                        {
+
+                            <div data-thumb="@image.Path"><img src="@image.Path" alt=""></div>
+
+
+                        }
+                        break;
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col col-lg-6 col-md-6">
+            <h6>@Model.Name</h6>
+            <h6>@Model.Model</h6>
+            <h6>@Model.Brend</h6>
+            <h6>@Model.Material</h6>
+            <h3>Оберіть колір</h3>
+            @Html.DropDownList("Colour", ViewBag.Kinds as SelectList, new { id = "colour" })
+            <div id="sizes">
+                @foreach (var kind in Model.Kinds)
+                {
+                    if (kind.Sizes != null)
+                    {<h6>Наявні розміри</h6>
+                        @foreach (var size in kind.Sizes)
+                        {
+
+                            <input type="radio" value="@size.Id" id="size" name="size" />@size.Name
+
+
+                        }}
+                    else
+                    { <h6>Товару в наявності немає</h6>}
+                    break;
+                }
+
+            </div>
+
+            <br /> Ціна <h4>@Model.Price</h4>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <input type="button" id="btn1" value="Додати у корзину" class="btn"/>
+            }
+            else
+            { <a asp-action="Login" asp-controller="Account">Додати у корзину</a>}
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+
+
+        $('#colour').change(function()
+        {
+            // получаем выбранный id
+            var id = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetImages")/' + id,
+                success: function (data) {
+
+                    // заменяем содержимое присланным частичным представлением
+                    $('#images').replaceWith(data);
+                }
+            });
+             $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetSizes")/' + id,
+                success: function (data) {
+
+                    // заменяем содержимое присланным частичным представлением
+                    $('#sizes').replaceWith(data);
+                }
+            });
+        });
+
+            $('#btn1').bind('click', function () {
+
+                var id = $("input[name=size]:checked").val();
+                alert(id);
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Addkorzunaitem")/' + id,
+                    success: function (data) {
+
+                        // заменяем содержимое присланным частичным представлением
+                        alert("Товар додано до корзини  " + data);
+                    }
+                })
+                    })
+            // получаем выбранный id
+
+    })
+
+
+    </script>
+}
