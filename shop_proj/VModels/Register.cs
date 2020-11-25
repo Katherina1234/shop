@@ -8,23 +8,24 @@ namespace shop_proj.VModels
 {
     public class Register
     {
-        [Required]
+        [Required(ErrorMessage  = "Заповніть поле")]
         [Display(Name = "Email")]
+        [RegularExpression(@"([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", ErrorMessage = "Некоректна адреса")]
         public string Email { get; set; }
 
-        [Required]
-        [Display(Name = "Год рождения")]
+        [Required(ErrorMessage = "Заповніть поле")]
+        [Display(Name = "Рік народження")]
         public int Year { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Заповніть поле")]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
-        [Required]
-        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
+        [Required(ErrorMessage = "Заповніть поле")]
+        [Compare("Password", ErrorMessage = "Паролі не співпадають")]
         [DataType(DataType.Password)]
-        [Display(Name = "Подтвердить пароль")]
+        [Display(Name = "Підтвердіть пароль")]
         public string PasswordConfirm { get; set; }
     }
 }

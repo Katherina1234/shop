@@ -4,28 +4,33 @@
 }
 <h2>@ViewBag.Title</h2>
 <form asp-action="addtovar" asp-controller="admin" enctype="multipart/form-data">
+    
     <div class="form-group">
         <label asp-for="Name" class="control-label">Назва</label>
         <input type="text" asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" style="color:red"></span>
     </div>
-   
+
     <div class="form-group">
         <label asp-for="Brend" class="control-label">Бренд</label>
         <input type="text" asp-for="Brend" class="form-control" />
+        <span asp-validation-for="Brend" style="color:red"></span>
     </div>
     <div class="form-group">
         <label asp-for="Material" class="control-label">Матеріал</label>
         <input type="text" asp-for="Material" class="form-control" />
+        <span asp-validation-for="Material" style="color:red"></span>
     </div>
     <div class="form-group">
         <label asp-for="Price" class="control-label">Ціна</label>
         <input type="text" asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" style="color:red"></span>
     </div>
     <div class="form-group">
         <label asp-for="CategoryId" class="control-label">Категорія</label>
         <input type="number" asp-for="CategoryId" class="form-control" />
     </div>
-   
+
 
     <div class="form-group">
         <input type="submit" value="Додати" class="btn btn-default" />

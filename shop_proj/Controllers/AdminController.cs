@@ -6,6 +6,7 @@ using shop_proj.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,11 +35,19 @@ namespace shop_proj.Controllers
         [HttpPost]
         public async Task<IActionResult> Addcategory(Category user)
         {
-            db.Categories.Add(user);
-
-
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            var results = new List<ValidationResult>();
+            var context = new ValidationContext(user);
+            if (!Validator.TryValidateObject(user, context, results, true))
+            {
+                return View();
+            }
+            else
+            {
+                db.Categories.Add(user);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+           
         }
         public IActionResult Addtovar()
         {
@@ -47,9 +56,16 @@ namespace shop_proj.Controllers
         [HttpPost]
         public async Task<IActionResult> Addtovar(Tovar user)
         {
-            db.Tovars.Add(user);          
-            await db.SaveChangesAsync();
-            return RedirectToAction("Tovarinf", new { id = user.Id });
+            if (ModelState.IsValid)
+            {
+                db.Tovars.Add(user);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Tovarinf", new { id = user.Id });
+            }
+            else
+                return View();
+           
+
         }
         public async Task<IActionResult> Tovarinf(int? id)
         {
@@ -102,22 +118,7 @@ namespace shop_proj.Controllers
             }
             List<Size> tt = new List<Size> { new Size("xxs", xxs),
             new Size("xs",xs), new Size ("s",s), new Size("m",m), new Size("l",l), new Size("xl",xl), new Size("xxl",xxl) };
-            Size t1 = new Size();
-          /*  foreach(var item in Sizesdif) {
-                t1.Name = item;
-                t1.Count = 1;
-                foreach (var item1 in Sizesdif)
-                {
-                    if (item1 == t1.Name)
-                    {
-                        Sizesdif.Remove(item1);
-                        t1.Count++;
-                    }
-
-                }
-                t1.Count--;
-                tt.Add(t1);
-                            }*/
+          
             foreach (var item in tt)
             {
                 if (item.Count != 0)
