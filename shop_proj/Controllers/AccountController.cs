@@ -84,8 +84,6 @@ namespace shop_proj.Controllers
             return View(obj);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await signman.SignOutAsync();

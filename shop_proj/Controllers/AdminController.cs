@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using shop_proj.Models;
 using System;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace shop_proj.Controllers
 {
-   
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private Models.AppContext db;
@@ -28,8 +30,10 @@ namespace shop_proj.Controllers
         {
             return View(await db.Tovars.ToListAsync());
         }
-        public IActionResult Addcategory()
+        public async Task<IActionResult> Addcategory()
         {
+            List<Sex> sex = await db.Sexs.ToListAsync();
+            ViewBag.Sex = sex;
             return View();
         }
         [HttpPost]
@@ -37,6 +41,7 @@ namespace shop_proj.Controllers
         {
             var results = new List<ValidationResult>();
             var context = new ValidationContext(user);
+
             if (!Validator.TryValidateObject(user, context, results, true))
             {
                 return View();
@@ -45,14 +50,56 @@ namespace shop_proj.Controllers
             {
                 db.Categories.Add(user);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("EditCategory", new { id = user.Id });
             }
            
         }
-        public IActionResult Addtovar()
+        public async Task<IActionResult> EditCategory(int? id)
         {
+            if (id != null)
+            {
+                Category user = await db.Categories.FirstOrDefaultAsync(p => p.Id == id);
+                if (user != null)
+                    return View(await db.Categories.Include(u => u.Modells).FirstOrDefaultAsync(p => p.Id == id));
+
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(Category user)
+        {
+            db.Categories.Update(user);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Addtovar()
+        {
+            SelectList sex = new SelectList(db.Sexs, "Id", "Name");
+            ViewBag.Sex = sex;
+            SelectList category = new SelectList(db.Categories.Where(p => p.SexId == 1), "Id", "Name");
+            List<Modell> modell = await db.Modells.Where(p => p.CategoryId ==  db.Categories.Where(p => p.SexId == 1).FirstOrDefault().Id).ToListAsync();
+            ViewBag.Category = category;
+            ViewBag.Modell = modell;
             return View();
         }
+        public IActionResult AddModell(int? id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddModell(Modell user)
+        {
+            Category category = await db.Categories.FirstOrDefaultAsync(p => p.Id == user.CategoryId);
+            
+           Modell modell= new Modell { Name = user.Name, Category = category };
+
+            db.Modells.Add(modell);
+          await db.SaveChangesAsync();
+            return RedirectToAction("EditCategory", new { id = category.Id });
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Addtovar(Tovar user)
         {
@@ -78,6 +125,8 @@ namespace shop_proj.Controllers
             }
             return NotFound();
         }
+
+
         [HttpPost]
         public async Task<IActionResult> Tovarinf(Tovar user)
         {
@@ -176,6 +225,22 @@ namespace shop_proj.Controllers
             }
             return NotFound();
         }
-
+        [HttpGet]
+        public ActionResult GetCategories(int id)
+        {
+            SelectList category = new SelectList(db.Categories.Where(p => p.SexId == id), "Id", "Name");
+            List<Modell> modell = db.Modells.Where(p => p.CategoryId == db.Categories.Where(p => p.SexId == id).FirstOrDefault().Id).ToList();
+            ViewBag.Category = category;
+            ViewBag.Modell = modell;
+            return PartialView();
+        }
+        [HttpGet]
+        public ActionResult GetModells(int id)
+        {
+            List<Modell> modell = db.Modells.Where(p => p.CategoryId == id).ToList();
+          
+            ViewBag.Modell = modell;
+            return PartialView();
+        }
     }
 }

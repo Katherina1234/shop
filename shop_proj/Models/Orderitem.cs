@@ -8,8 +8,8 @@ namespace shop_proj.Models
     public class Orderitem
     {
         public int Id { get; set; }
-        public User Order { get; set; }
-        public string OrderId { get; set; }
+        public Order Order { get; set; }
+        public int OrderId { get; set; }
         public Size Size { get; set; }
         public int SizeId { get; set; }
     }

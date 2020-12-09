@@ -10,8 +10,8 @@ using shop_proj.Models;
 namespace shop_proj.Migrations
 {
     [DbContext(typeof(Models.AppContext))]
-    [Migration("20201124155304_mig6")]
-    partial class mig6
+    [Migration("20201205153411_mig9")]
+    partial class mig9
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -152,6 +152,34 @@ namespace shop_proj.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("shop_proj.Models.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("KomentarId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KomentarId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Answers");
+                });
+
             modelBuilder.Entity("shop_proj.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -160,9 +188,15 @@ namespace shop_proj.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SexId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SexId");
 
                     b.ToTable("Categories");
                 });
@@ -198,6 +232,7 @@ namespace shop_proj.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Colour")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TovarId")
@@ -208,6 +243,34 @@ namespace shop_proj.Migrations
                     b.HasIndex("TovarId");
 
                     b.ToTable("Kinds");
+                });
+
+            modelBuilder.Entity("shop_proj.Models.Komentar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TovarId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TovarId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Komentars");
                 });
 
             modelBuilder.Entity("shop_proj.Models.Korzyna", b =>
@@ -252,6 +315,26 @@ namespace shop_proj.Migrations
                     b.ToTable("Korzynaitems");
                 });
 
+            modelBuilder.Entity("shop_proj.Models.Modell", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Modells");
+                });
+
             modelBuilder.Entity("shop_proj.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -294,10 +377,7 @@ namespace shop_proj.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("OrderId1")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("SizeId")
@@ -307,11 +387,24 @@ namespace shop_proj.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("OrderId1");
-
                     b.HasIndex("SizeId");
 
                     b.ToTable("Orderitems");
+                });
+
+            modelBuilder.Entity("shop_proj.Models.Sex", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sexs");
                 });
 
             modelBuilder.Entity("shop_proj.Models.Size", b =>
@@ -345,26 +438,27 @@ namespace shop_proj.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Brend")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Material")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Model")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ModellId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("ModellId");
 
                     b.ToTable("Tovars");
                 });
@@ -393,6 +487,9 @@ namespace shop_proj.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -488,6 +585,34 @@ namespace shop_proj.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("shop_proj.Models.Answer", b =>
+                {
+                    b.HasOne("shop_proj.Models.Komentar", "Komentar")
+                        .WithMany()
+                        .HasForeignKey("KomentarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("shop_proj.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Komentar");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("shop_proj.Models.Category", b =>
+                {
+                    b.HasOne("shop_proj.Models.Sex", "Sex")
+                        .WithMany("Categories")
+                        .HasForeignKey("SexId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sex");
+                });
+
             modelBuilder.Entity("shop_proj.Models.Image", b =>
                 {
                     b.HasOne("shop_proj.Models.Kind", "Kind")
@@ -508,6 +633,23 @@ namespace shop_proj.Migrations
                         .IsRequired();
 
                     b.Navigation("Tovar");
+                });
+
+            modelBuilder.Entity("shop_proj.Models.Komentar", b =>
+                {
+                    b.HasOne("shop_proj.Models.Tovar", "Tovar")
+                        .WithMany()
+                        .HasForeignKey("TovarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("shop_proj.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Tovar");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("shop_proj.Models.Korzyna", b =>
@@ -538,6 +680,17 @@ namespace shop_proj.Migrations
                     b.Navigation("Size");
                 });
 
+            modelBuilder.Entity("shop_proj.Models.Modell", b =>
+                {
+                    b.HasOne("shop_proj.Models.Category", "Category")
+                        .WithMany("Modells")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("shop_proj.Models.Order", b =>
                 {
                     b.HasOne("shop_proj.Models.User", "User")
@@ -549,13 +702,11 @@ namespace shop_proj.Migrations
 
             modelBuilder.Entity("shop_proj.Models.Orderitem", b =>
                 {
-                    b.HasOne("shop_proj.Models.User", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId");
-
-                    b.HasOne("shop_proj.Models.Order", null)
+                    b.HasOne("shop_proj.Models.Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId1");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("shop_proj.Models.Size", "Size")
                         .WithMany()
@@ -581,18 +732,18 @@ namespace shop_proj.Migrations
 
             modelBuilder.Entity("shop_proj.Models.Tovar", b =>
                 {
-                    b.HasOne("shop_proj.Models.Category", "Category")
+                    b.HasOne("shop_proj.Models.Modell", "Modell")
                         .WithMany("Tovars")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("ModellId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Modell");
                 });
 
             modelBuilder.Entity("shop_proj.Models.Category", b =>
                 {
-                    b.Navigation("Tovars");
+                    b.Navigation("Modells");
                 });
 
             modelBuilder.Entity("shop_proj.Models.Kind", b =>
@@ -607,9 +758,19 @@ namespace shop_proj.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("shop_proj.Models.Modell", b =>
+                {
+                    b.Navigation("Tovars");
+                });
+
             modelBuilder.Entity("shop_proj.Models.Order", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("shop_proj.Models.Sex", b =>
+                {
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("shop_proj.Models.Tovar", b =>

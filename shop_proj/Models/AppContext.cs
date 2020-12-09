@@ -18,6 +18,10 @@ namespace shop_proj.Models
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Korzyna> Korzuna { get; set; }
         public DbSet<Korzynaitem> Korzynaitems { get; set; }
+        public DbSet<Sex> Sexs { get; set; }
+        public DbSet<Modell> Modells { get; set; }
+        public DbSet<Komentar> Komentars { get; set; }
+        public DbSet<Answer> Answers { get; set; }
         public AppContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();

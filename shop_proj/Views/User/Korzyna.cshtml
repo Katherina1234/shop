@@ -1,70 +1,130 @@
-﻿@model shop_proj.Models.Korzyna
+﻿@model shop_proj.VModels.KorzynaOrder
 @{
     ViewBag.Title = "";
 }
-<form method="post">
+
     <div class="container">
+        <div class="row">
+            <div class="col col-lg-8 col-md-8">
+                @if (Model.korzyna != null)
+                {
+                @foreach (var item in Model.korzyna.Items)
+                {
+                    <div class="row item_korz ">
 
+                        <div class="col col-lg-4 col-md-4">
+                            <input type="checkbox" name="add[]" value="@item.Size.Id">
+                            <h6>@item.Size.Kind.Tovar.Name </h6>
+                            <h6>Ціна @item.Size.Kind.Tovar.Price грн.</h6>
+                        </div>
+                        <div class="col col-lg-4 col-md-4">
+                            <h6>Розмір @item.Size.Name </h6>
+                        </div>
+                        <div class="col col-lg-4 col-md-4">
+                            @foreach (var image in item.Size.Kind.Images)
+                            {
+                                <div class="mini_img">
+                                    <img src="@image.Path" alt="Sample Image" />
 
-        @foreach (var item in Model.Items)
-        {
-            <div class="row item_korz ">
+                                </div>
 
+                                break;
+                            }
+                        </div>
+                    </div>
+
+                }}
+                else
+                {
+                    <h5>Корзина порожня</h5>
+                }
+            <div id="changeprise">
+                Всього до оплати - <input type="text" сlass="form-control" value="0" id="price1" />
+            </div>
+                <input type="button" id="btn1" value="Обрати" class="btn" />
+            </div>
                 <div class="col col-lg-4 col-md-4">
-                    <input type="checkbox" name="add[]" value="@item.Size.Id">
-                    <h6>@item.Size.Kind.Tovar.Name - @item.Size.Kind.Tovar.Model</h6>
-                    <h6>Ціна @item.Size.Kind.Tovar.Price грн.</h6>
-                </div>
-                <div class="col col-lg-4 col-md-4">
-                    <h6>Розмір @item.Size.Name </h6>
-                </div>
-                <div class="col col-lg-4 col-md-4">
-                    @foreach (var image in item.Size.Kind.Images)
-                    {
-                        <div class="mini_img">
-                            <img src="@image.Path" alt="Sample Image" />
-
+                    <form asp-action="addorder" asp-controller="user">
+                        <h5>Оформити замовлення</h5>
+                        <div class="form-group">
+                            <label asp-for="order.Price" class="control-label">До оплати</label>
+                            <input type="text" asp-for="order.Price" class="form-control" value="0" id="price"/>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="order.City" class="control-label">Місто</label>
+                            <input type="text" asp-for="order.City" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="order.address" class="control-label">Адреса</label>
+                            <input type="text" asp-for="order.address" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="order.postoffice" class="control-label">Номер пошти</label>
+                            <input type="text" asp-for="order.postoffice" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="order.datezam" class="control-label">Дата замовлення</label>
+                            <input type="text" asp-for="order.datezam" class="form-control" value="@DateTime.Today" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="order.Delivery" class="control-label">Доставка</label>
+                            <input type="text" asp-for="order.Delivery" class="form-control" />
                         </div>
 
-                        break;
-                    }
-                </div>
+                        <input type="text" class="form-control" asp-for="items" id="item" value="" hidden />
+                        <div class="form-group">
+                            <input type="submit" value="Замовити" class="btn btn-default" />
+                        </div>
+
+                    </form>
+                    </div>
             </div>
 
-        }
+           
 
-        <input type="button" id="btn1" value=" Замовити" class="btn" />
+        </div>
 
-    </div>
-
-</form>
 @section scripts{
     <script type="text/javascript">
         $(function () {
 
 
             $('#btn1').bind('click', function () {
-                var check = [];
+                var $check = [];
                 $("input[type=checkbox]:checked").each(function () {
-                    check.push($(this).attr("value"));
+                    $check.push($(this).attr("value"));
                 });
+                $('#item').attr('value', $check);
+                $('#price').attr('value', $('#price1').val());
+            });
 
-                var selectedValue = $("option:selected").attr("value");
-
-                alert("CheckBox [0]: " + check[0]);
-                alert("CheckBox [1]: " + check[1]);
-
-               $.ajax({
-                type: 'POST',
-                   url: '@Url.Action("GetImages")/' + id,
-                   data: check,
+            $('input[type=checkbox]').change(function()
+        {
+                var $check = [];
+                $("input[type=checkbox]:checked").each(function () {
+                    $check.push($(this).attr("value"));
+                });
+               
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetPrise")',
+                traditional: true,
+                data: { 'mas': $check }   ,
                 success: function (data) {
 
+                    $('#changeprise').replaceWith(data);
                 }
             });
-            });
+             
+        });
 
-        })
+           /* $('input:checkbox:checked').each(function () {
+                alert($(this).val());
+            });*/
+            })
+
+
+
 
 
     </script>

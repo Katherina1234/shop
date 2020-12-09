@@ -7,6 +7,8 @@ namespace shop_proj.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+           
+
             migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
@@ -38,25 +40,18 @@ namespace shop_proj.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    SizeId = table.Column<int>(type: "int", nullable: false),
-                    OrderId1 = table.Column<int>(type: "int", nullable: true)
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    SizeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orderitems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orderitems_AspNetUsers_OrderId",
+                        name: "FK_Orderitems_Orders_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Orderitems_Orders_OrderId1",
-                        column: x => x.OrderId1,
                         principalTable: "Orders",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orderitems_Sizes_SizeId",
                         column: x => x.SizeId,
@@ -69,11 +64,6 @@ namespace shop_proj.Migrations
                 name: "IX_Orderitems_OrderId",
                 table: "Orderitems",
                 column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orderitems_OrderId1",
-                table: "Orderitems",
-                column: "OrderId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orderitems_SizeId",
@@ -93,6 +83,7 @@ namespace shop_proj.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
         }
     }
 }

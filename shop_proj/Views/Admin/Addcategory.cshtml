@@ -9,7 +9,7 @@
         <label asp-for="Name" class="control-label">Назва</label>
         <input type="text" asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" style="color:red"></span>
-
+        <select asp-for="SexId" class="form-control" asp-items="@(new SelectList(ViewBag.Sex, "Id","Name"))"></select>
     </div>
    
 

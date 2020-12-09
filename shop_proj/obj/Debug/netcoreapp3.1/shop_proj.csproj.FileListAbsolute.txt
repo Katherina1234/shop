@@ -171,3 +171,15 @@ F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\shop_proj.MvcApplicati
 F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\User\GetSizes.cshtml.g.cs
 F:\univer\asp\shop_proj\shop_proj\bin\Debug\netcoreapp3.1\web.config
 F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\User\Korzyna.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\User\Check.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\User\GetPrise.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\User\FilterTovars.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout1.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\Admin\AddModell.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditCategory.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\Admin\GetCategories.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\Admin\GetModells.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\User\GetTovars.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\User\GetKoments.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\User\GetAnswers.cshtml.g.cs
+F:\univer\asp\shop_proj\shop_proj\obj\Debug\netcoreapp3.1\Razor\Views\User\Orders.cshtml.g.cs
